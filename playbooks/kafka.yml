@@ -1,0 +1,6 @@
+---
+# Kafka installations
+
+- hosts: kafka
+  roles: 
+    - kafka

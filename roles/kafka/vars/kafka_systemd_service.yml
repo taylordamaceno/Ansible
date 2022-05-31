@@ -1,0 +1,21 @@
+---
+# Variables to create service file to Zookeeper
+
+systemd_service_filename: "kafka.service"
+systemd_service_description: "Apache Kafka"
+systemd_service_after: "syslog.target network.target zookeeper.service"
+systemd_service_wants: "zookeeper.service"
+systemd_service_user: "kafka"
+systemd_service_group: "kafka"
+systemd_service_type: "simple"
+systemd_service_execstart: "/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/kafka-broker.properties"
+systemd_service_execstop: "/opt/kafka/bin/kafka-server-stop.sh"
+systemd_service_wantedby: "multi-user.target"
+systemd_service_annotation: ""
+systemd_service_environmentfile: ""
+systemd_service_standardoutput: ""
+systemd_service_standarderror: ""
+systemd_service_syslogidentifier: ""
+systemd_service_restart: ""
+systemd_service_restartsec: ""
+systemd_service_privatetmp: ""

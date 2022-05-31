@@ -1,0 +1,9 @@
+---
+- name: Include Kafka Sytemd Service variables
+  include_vars:
+    file: kafka_systemd_service.yml
+
+- name: Create Systemd Service to Kafka
+  include_role:
+    name: common
+    tasks_from: systemd_service
