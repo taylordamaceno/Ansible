@@ -1,0 +1,5 @@
+---
+# Variáveis para provisionamento do elasticsearch_plugin
+
+java_version: "1.8.0"
+elastic_http_port: 9200

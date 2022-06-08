@@ -1,0 +1,6 @@
+---
+# Zookeeper installations
+    
+- hosts: zookeeper
+  roles:
+    - zookeeper

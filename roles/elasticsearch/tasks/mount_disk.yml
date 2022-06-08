@@ -1,0 +1,18 @@
+---
+# Coleta informações o disco e adiciona ponto de montagem
+
+- name: Coletando novamente informações do disco
+  include_role:
+    name: common
+    tasks_from: disk/check/device
+  when: external_disk
+
+- name: Montar disco e incluir no /etc/fstab
+  mount:
+    path: "{{ cluster_data_dir }}"
+    src: UUID="{{ uuid.stdout }}"
+    fstype: xfs
+    opts: defaults
+    state: present
+  become: true
+  when: external_disk

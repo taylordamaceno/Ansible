@@ -1,0 +1,13 @@
+---
+# Configuração do disco para LVM
+
+- name: Incluir variáveis do disco de dados do Elasticsearch
+  include_vars:
+    file: elastic_disk_vars.yml
+  when: external_disk
+
+- name: Incluindo configuração de disco
+  include_role:
+    name: common
+    tasks_from: disk/disk
+  when: external_disk

@@ -1,0 +1,10 @@
+---
+# Variáveis para criar LVM do Elasticsearch
+
+# Atenção o dispositivo só estará nesta localização
+# caso seja provisionado via Terraform. Se um novo disco
+# for adquirido diretamente pela AWS e associado
+# na instância, terá outra localização
+device_location: "/dev/nvme1n1"
+volume_group_name: "vg00"
+logical_volume_name: "vol_dados001"

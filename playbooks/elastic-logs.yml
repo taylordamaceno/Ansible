@@ -1,0 +1,11 @@
+---
+# Provisionando Elasticsearch para Squad de Busca
+
+- hosts: elastic-logs
+  roles:
+    - elasticsearch
+  vars:
+    cluster_name: 'elastic-logs'
+    external_disk: true
+    cluster_data_dir: '/elastic-data'
+    cluster_log_dir: '/var/log/elastic'

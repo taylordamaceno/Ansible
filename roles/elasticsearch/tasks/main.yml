@@ -1,0 +1,107 @@
+---
+# Tasks para provisionar o Elasticsearch
+
+- name: Instalar pacotes comuns
+  include_role:
+    name: common
+    tasks_from: main
+
+- name: Incluir variáveis do Elasticsearch
+  include_vars:
+    file: elasticsearch_vars.yml
+
+- name: Instalar OpenJDK
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - "java-{{ java_version }}-openjdk"
+    - "java-{{ java_version }}-openjdk-devel"
+  become: true
+
+- name: Adicionando chave do Elasticsearch
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  become: true
+
+- name: Adicionar repositório do Elasticsearch
+  copy:
+    dest: /etc/yum.repos.d/elasticsearch.repo
+    src: elasticsearch.repo
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
+- name: Atualizar todos os pacotes
+  yum:
+    name: "*"
+    state: latest
+  become: true
+
+- name: Instala pacote do Elasticsearch do repositório
+  yum:
+    name: elasticsearch
+    state: present
+  become: true
+
+- name: Gera arquivo de configuração do Elasticsearch
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+  become: true
+  register: elastic_config_file
+
+- name: Gera arquivo de jvm do Elasticsearch
+  template:
+    src: jvm.options.j2
+    dest: /etc/elasticsearch/jvm.options
+  become: true
+  register: elastic_jvm_file
+
+- name: Iniciando processo de configuração do disco
+  include_role:
+    name: elasticsearch
+    tasks_from: configure_disk.yml
+  when: external_disk
+
+- name: Criando diretório de dados
+  file:
+    path: "{{ cluster_data_dir }}"
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0700
+  become: true
+
+- name: Criando diretório de logs
+  file:
+    path: "{{ cluster_log_dir }}"
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0744
+  become: true
+
+- name: Inicia montagem do disco
+  include_role:
+    name: elasticsearch
+    tasks_from: mount_disk.yml
+  when: external_disk
+
+- name: Garante serviço do Elasticsearch
+  service:
+    name: elasticsearch
+    state: started
+    enabled: true
+  become: true
+
+- name: Reinicia serviço caso a configuração seja alterada
+  service:
+    name: elasticsearch
+    state: restarted
+    enabled: yes
+  become: true
+  when: elastic_config_file is changed or elastic_jvm_file

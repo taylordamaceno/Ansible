@@ -7,7 +7,7 @@
 4. Install OpenJDK 8
 5. update zookeeper address kafka-manager/conf/application.conf only
 ```
-kafka-manager.zkhosts="10.0.6.130:2181"
+kafka-manager.zkhosts="server1:2181"
 ```
 6. create kafka-manager systemd file
 ```

@@ -1,0 +1,9 @@
+---
+- name: Include Zookeeper Sytemd Service variables
+  include_vars:
+    file: zookeeper_systemd_service.yml
+
+- name: Create Systemd Service to Zookeeper
+  include_role:
+    name: common
+    tasks_from: systemd_service
